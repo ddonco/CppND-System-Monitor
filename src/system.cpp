@@ -1,63 +1,42 @@
 #include <unistd.h>
 #include <cstddef>
+#include <iostream>
 #include <set>
 #include <string>
 #include <vector>
-#include <iostream>
 
+#include "linux_parser.h"
 #include "process.h"
 #include "processor.h"
 #include "system.h"
-#include "linux_parser.h"
 
 using std::set;
 using std::size_t;
 using std::string;
 using std::vector;
 
-// TODO: Return the system's CPU
 Processor &System::Cpu() { return cpu_; }
 
-// TODO: Return a container composed of the system's processes
-vector<Process> &System::Processes() { return processes_; }
-
-// TODO: Return the system's kernel identifier (string)
-std::string System::Kernel()
-{
-    return LinuxParser::Kernel();
+vector<Process> &System::Processes() {
+  processes_ = {};
+  pids_ = {};
+  pids_ = LinuxParser::Pids();
+  for (int pid : pids_) {
+    Process process(pid);
+    processes_.push_back(process);
+  }
+  std::sort(processes_.begin(), processes_.end());
+  return processes_;
 }
 
-// TODO: Return the system's memory utilization
-float System::MemoryUtilization()
-{
-    return LinuxParser::MemoryUtilization();
-}
+std::string System::Kernel() { return LinuxParser::Kernel(); }
 
-// TODO: Return the operating system name
-std::string System::OperatingSystem()
-{
-    return LinuxParser::OperatingSystem();
-}
+float System::MemoryUtilization() { return LinuxParser::MemoryUtilization(); }
 
-// TODO: Return the number of processes actively running on the system
-int System::RunningProcesses()
-{
-    return LinuxParser::RunningProcesses();
-}
+std::string System::OperatingSystem() { return LinuxParser::OperatingSystem(); }
 
-// TODO: Return the total number of processes on the system
-int System::TotalProcesses()
-{
-    return LinuxParser::TotalProcesses();
-}
+int System::RunningProcesses() { return LinuxParser::RunningProcesses(); }
 
-// TODO: Return the number of seconds since the system started running
-long int System::UpTime()
-{
-    vector<int> pids = LinuxParser::Pids();
-    // need to format seconds using helper function
+int System::TotalProcesses() { return LinuxParser::TotalProcesses(); }
 
-    // std::cout << "pid: " << pids[0] << " - " << LinuxParser::UpTime(pids[0]) << std::endl;
-    // std::copy(pids.begin(), pids.end(), std::ostream_iterator<int>(std::cout, "\n"));
-    return LinuxParser::UpTime();
-}
+long int System::UpTime() { return LinuxParser::UpTime(); }

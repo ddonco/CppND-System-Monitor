@@ -1,31 +1,30 @@
-#include <string>
-#include <iostream>
 #include "processor.h"
+#include <iostream>
+#include <string>
 #include "linux_parser.h"
 
 // TODO: Return the aggregate CPU utilization
-float Processor::Utilization()
-{
-    // tag, user, nice, system, idle, iowait, irq, softirq, steal, guest, guest_nice
-    cpuStringData = LinuxParser::CpuUtilization();
-    // std::cout << "len: " << cpuStringData.size() << " - " << cpuStringData[8] << " " << cpuStringData[9] << std::endl;
-    for (std::string s : cpuStringData)
-    {
-        cpuIntData.push_back(std::stoi(s));
-    }
+float Processor::Utilization() {
+  // tag, user, nice, system, idle, iowait, irq, softirq, steal, guest,
+  // guest_nice
+  cpuStringData = LinuxParser::CpuUtilization();
+  cpuFloatData = {};
+  for (unsigned int i = 0; i < cpuStringData.size(); i++) {
+    cpuFloatData.push_back(std::stof(cpuStringData[i]));
+  }
 
-    prevIdle = idle;
-    idle = cpuIntData[3] + cpuIntData[4];
+  idle = cpuFloatData[3] + cpuFloatData[4];
 
-    prevActive = active;
-    active = cpuIntData[0] + cpuIntData[1] + cpuIntData[2] + cpuIntData[5] + cpuIntData[6] + cpuIntData[7];
+  active = cpuFloatData[0] + cpuFloatData[1] + cpuFloatData[2] +
+           cpuFloatData[5] + cpuFloatData[6] + cpuFloatData[7];
 
-    prevTotal = prevIdle + prevActive;
-    total = idle + active;
+  total = idle + active;
 
-    // differentiate: actual value minus the previous one
-    dTotal = total - prevTotal;
-    dIdle = idle - prevIdle;
-    // std::cout << "util: " << total << " " << prevTotal << std::endl;
-    return (float)(total - idle) / total;
+  // differentiate: actual value minus the previous one
+  dTotal = total - prevTotal;
+  dActive = active - prevActive;
+  prevTotal = total;
+  prevActive = active;
+
+  return dActive / dTotal;
 }

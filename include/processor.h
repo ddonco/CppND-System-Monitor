@@ -4,23 +4,20 @@
 #include <string>
 #include <vector>
 
-class Processor
-{
-public:
-    float Utilization(); // TODO: See src/processor.cpp
+class Processor {
+ public:
+  float Utilization();
 
-    // TODO: Declare any necessary private members
-private:
-    std::vector<std::string> cpuStringData = {};
-    std::vector<int> cpuIntData = {};
-    int idle{0};
-    int prevIdle{0};
-    int active{0};
-    int prevActive{0};
-    int total{0};
-    int prevTotal{0};
-    int dTotal{0};
-    int dIdle{0};
+ private:
+  std::vector<std::string> cpuStringData = {};
+  std::vector<float> cpuFloatData = {};
+  float idle{0};
+  float active{0};
+  float prevActive{0};
+  float total{0};
+  float prevTotal{0};
+  float dTotal{0};
+  float dActive{0};
 };
 
 #endif
