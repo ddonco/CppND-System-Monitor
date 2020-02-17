@@ -3,7 +3,6 @@
 #include <string>
 #include "linux_parser.h"
 
-// TODO: Return the aggregate CPU utilization
 float Processor::Utilization() {
   // tag, user, nice, system, idle, iowait, irq, softirq, steal, guest,
   // guest_nice

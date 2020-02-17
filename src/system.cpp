@@ -19,9 +19,8 @@ Processor &System::Cpu() { return cpu_; }
 
 vector<Process> &System::Processes() {
   processes_ = {};
-  pids_ = {};
-  pids_ = LinuxParser::Pids();
-  for (int pid : pids_) {
+  vector<int> pids = LinuxParser::Pids();
+  for (int pid : pids) {
     Process process(pid);
     processes_.push_back(process);
   }

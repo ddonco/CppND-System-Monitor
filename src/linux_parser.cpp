@@ -99,7 +99,7 @@ long LinuxParser::UpTime() {
 
 long LinuxParser::Jiffies() {
   string line;
-  long user{0}, nice{0}, system{0}, idle{0}, iowait{0}, irq{0}, softirq{0},
+  long int user{0}, nice{0}, system{0}, idle{0}, iowait{0}, irq{0}, softirq{0},
       steal{0}, guest{0}, guest_nice{0};
   std::ifstream filestream(kProcDirectory + kStatFilename);
   if (filestream.is_open()) {
@@ -130,7 +130,7 @@ long LinuxParser::ActiveJiffies(int pid) {
 
 long LinuxParser::ActiveJiffies() {
   string line;
-  long user{0}, nice{0}, system{0}, idle{0}, iowait{0}, irq{0}, softirq{0},
+  long int user{0}, nice{0}, system{0}, idle{0}, iowait{0}, irq{0}, softirq{0},
       steal{0}, guest{0}, guest_nice{0};
   std::ifstream filestream(kProcDirectory + kStatFilename);
   if (filestream.is_open()) {
@@ -144,7 +144,7 @@ long LinuxParser::ActiveJiffies() {
 
 long LinuxParser::IdleJiffies() {
   string line;
-  long user{0}, nice{0}, system{0}, idle{0}, iowait{0};
+  long int user{0}, nice{0}, system{0}, idle{0}, iowait{0};
   std::ifstream filestream(kProcDirectory + kStatFilename);
   if (filestream.is_open()) {
     std::getline(filestream, line);

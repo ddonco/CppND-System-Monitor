@@ -14,8 +14,8 @@ using std::vector;
 int Process::Pid() { return this->pid_; }
 
 float Process::CpuUtilization() {
-  long totaltime = LinuxParser::ActiveJiffies(this->pid_);
-  long uptime = LinuxParser::UpTime(this->pid_);
+  const long int totaltime = LinuxParser::ActiveJiffies(this->pid_);
+  const long int uptime = LinuxParser::UpTime(this->pid_);
   return (float)(totaltime / sysconf(_SC_CLK_TCK)) / uptime;
 }
 
