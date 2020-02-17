@@ -97,21 +97,6 @@ long LinuxParser::UpTime() {
   return std::stol(upTimeStr);
 }
 
-long LinuxParser::Jiffies() {
-  string line;
-  long int user{0}, nice{0}, system{0}, idle{0}, iowait{0}, irq{0}, softirq{0},
-      steal{0}, guest{0}, guest_nice{0};
-  std::ifstream filestream(kProcDirectory + kStatFilename);
-  if (filestream.is_open()) {
-    std::getline(filestream, line);
-    std::istringstream linestream(line);
-    linestream >> user >> nice >> system >> idle >> iowait >> irq >> softirq >>
-        steal >> guest >> guest_nice;
-  }
-  return user + nice + system + idle + iowait + irq + softirq + steal + guest +
-         guest_nice;
-}
-
 long LinuxParser::ActiveJiffies(int pid) {
   string line, value;
   vector<string> statData = {};
@@ -126,32 +111,6 @@ long LinuxParser::ActiveJiffies(int pid) {
   }
   return std::stol(statData[13]) + std::stol(statData[14]) +
          std::stol(statData[15]) + std::stol(statData[16]);
-}
-
-long LinuxParser::ActiveJiffies() {
-  string line;
-  long int user{0}, nice{0}, system{0}, idle{0}, iowait{0}, irq{0}, softirq{0},
-      steal{0}, guest{0}, guest_nice{0};
-  std::ifstream filestream(kProcDirectory + kStatFilename);
-  if (filestream.is_open()) {
-    std::getline(filestream, line);
-    std::istringstream linestream(line);
-    linestream >> user >> nice >> system >> idle >> iowait >> irq >> softirq >>
-        steal >> guest >> guest_nice;
-  }
-  return user + nice + system + irq + softirq + steal + guest + guest_nice;
-}
-
-long LinuxParser::IdleJiffies() {
-  string line;
-  long int user{0}, nice{0}, system{0}, idle{0}, iowait{0};
-  std::ifstream filestream(kProcDirectory + kStatFilename);
-  if (filestream.is_open()) {
-    std::getline(filestream, line);
-    std::istringstream linestream(line);
-    linestream >> user >> nice >> system >> idle >> iowait;
-  }
-  return idle + iowait;
 }
 
 vector<string> LinuxParser::CpuUtilization() {
